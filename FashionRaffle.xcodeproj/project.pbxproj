@@ -668,7 +668,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "FashionRaffle-EC601.Raffle-Fdddd";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/Jingwei1/Downloads/ORiginal-Fashion-Raffle-Spark_Backup/Bridging Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/Mac/Desktop/Project/ORiginal-Fashion-Raffle-Spark_Backup/Bridging Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -694,7 +694,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "FashionRaffle-EC601.Raffle-Fdddd";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/Jingwei1/Downloads/ORiginal-Fashion-Raffle-Spark_Backup/Bridging Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/Mac/Desktop/Project/ORiginal-Fashion-Raffle-Spark_Backup/Bridging Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

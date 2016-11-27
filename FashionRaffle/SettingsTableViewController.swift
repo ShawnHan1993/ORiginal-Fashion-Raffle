@@ -13,6 +13,7 @@ import FirebaseDatabase
 
 class SettingTableViewController: UITableViewController, FBSDKLoginButtonDelegate {
     
+    @IBOutlet weak var ticketBalance: UILabel!
     
     @IBOutlet weak var userEmail: UILabel!
     
@@ -23,6 +24,12 @@ class SettingTableViewController: UITableViewController, FBSDKLoginButtonDelegat
     @IBOutlet weak var profileImage: UIImageView!
     let ref = FIRDatabase.database().reference()
     
+    @IBAction func purchaseRaffleTicket(_ sender: Any) {
+       
+        
+        
+        
+    }
     @IBAction func changeProfileName(_ sender: Any) {
         let uid = FIRAuth.auth()?.currentUser?.uid
         if FBSDKAccessToken.current() == nil {
@@ -63,6 +70,7 @@ class SettingTableViewController: UITableViewController, FBSDKLoginButtonDelegat
     func determineUserType(){
         if FBSDKAccessToken.current() == nil {
             emailUserHandler()
+            
         } else {
             fbUserHandler()
         }
@@ -79,8 +87,10 @@ class SettingTableViewController: UITableViewController, FBSDKLoginButtonDelegat
             ref.child("Users/EmailUsers").child(uid!).observeSingleEvent(of: .value, with: {(snapshot) in
                 let value = snapshot.value as? NSDictionary
                 let username = value?["name"] as? String
-                
+                let balance = value?["raffleTicket"]
                 self.profileName.text = username
+                
+                self.ticketBalance.text = balance as! String?    //show ticket balance
                 
                 //self.ref.child("Users/EmailUsers").child(user.uid).setValue(self.profileName.text)
 
@@ -92,6 +102,7 @@ class SettingTableViewController: UITableViewController, FBSDKLoginButtonDelegat
     
   
     func fbUserHandler(){ //uncertain about this
+        logoutButton = FBSDKLoginButton()
         
     }
     

@@ -93,7 +93,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
         else{
             
             let email = emailTextField.text, password = passwordTextField.text, name = nameTextField.text
-            
+            let raffleTicket = "0";
             FIRAuth.auth()?.createUser(withEmail: email!, password: password!, completion: {(user, error) in
                 if error == nil{
                     
@@ -104,7 +104,7 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate {
                     
                     // put the values into Firebase Auth
                     let ref = FIRDatabase.database().reference()
-                    let values = ["name": name, "email":email, "userID": uid]
+                    let values = ["name": name, "email":email, "userID": uid, "raffleTicket": raffleTicket]
                     let usersReference = ref.child("Users/EmailUsers").child(uid)
                     
                     usersReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
