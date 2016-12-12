@@ -11,6 +11,7 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 import FirebaseStorageUI
+import SVProgressHUD
 
 class NewsFeedTableViewController: UITableViewController, UISearchBarDelegate {
     
@@ -24,7 +25,6 @@ class NewsFeedTableViewController: UITableViewController, UISearchBarDelegate {
     var label : UILabel?
     
     var shouldFiltContents = false
-    //let searchController = UISearchController(searchResultsController: nil)
     
     let storageReference = FIRStorage.storage()
     
@@ -33,36 +33,48 @@ class NewsFeedTableViewController: UITableViewController, UISearchBarDelegate {
         
         label?.text = self.title
         
+        SVProgressHUD.show(withStatus: "Loading News Feed...")
+        //Messing with dates and daily sign in
+        /*let date = Date()
+        let cal = Calendar(identifier: .gregorian)
+        let newDate = cal.startOfDay(for: date) // return as a Date
+        */
+        
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "search button"), style: .plain, target: self, action: #selector(self.searchTapped))
         
         
         let ref = FIRDatabase.database().reference()
         
-        
         ref.child("Demos").queryOrderedByKey().observe(.childAdded, with: {
             snapshot in
             
+            let key = snapshot.key
             let value = snapshot.value as? NSDictionary
-            let title = value!["Title"] as? String
-            let subtitle = value!["SubTitle"] as? String
-            let image = value!["Image"] as? String
+            let title = value!["Title"] as! String
+            let subtitle = value!["SubTitle"] as! String
+            let image = value!["Image"] as! String
+            let text = value!["Text"] as! String
             
-            let newsData = NewsFeedData.init(title: title!, subtitle: subtitle!, image: image!)
-            self.newsDatas.insert(newsData, at: 0)
+            let newsData = NewsFeedData.init(title: title, subtitle: subtitle, image: image, details: text, pathKey: key)
+            self.newsDatas.append(newsData)
             
             self.tableView.reloadData()
-            
         })
-        self.refreshControl?.addTarget(self, action: #selector(self.handleRefresh(refreshControl:)), for: .valueChanged)
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+1.2, execute: {
+            SVProgressHUD.dismiss()
+        })
+        //self.refreshControl?.addTarget(self, action: #selector(self.handleRefresh(refreshControl:)), for: .valueChanged)
     }
     
     //The function for search bar
     
+
     func searchTapped() {
         
         searchBar.delegate = self
-        searchBar.tintColor = UIColor(red: 101, green: 201, blue: 255, alpha: 1)
+        searchBar.tintColor = UIColor(red: 55/255, green: 183/255, blue: 255/255, alpha: 1)
         
         searchBar.isHidden = false
         searchBar.showsCancelButton = false
@@ -106,24 +118,6 @@ class NewsFeedTableViewController: UITableViewController, UISearchBarDelegate {
         }
         
     }
-    
-    /*func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-     self.filterednewsDatas = newsDatas.filter({ content in
-     
-     let title = content.title
-     return title.lowercased().contains(searchText.lowercased())
-     
-     })
-     
-     if searchText != "" {
-     shouldFiltContents = true
-     self.tableView.reloadData()
-     }
-     else {
-     shouldFiltContents = false
-     self.tableView.reloadData()
-     }
-     }*/
     
     
     
@@ -215,9 +209,9 @@ class NewsFeedTableViewController: UITableViewController, UISearchBarDelegate {
         let storage = storageReference.reference(forURL: imageURL)
         
         viewController.reference = storage
-        
+        viewController.passKey = newsData.pathKey
         viewController.passLabel = newsData.title
-        viewController.passDetail = newsData.subtitle
+        viewController.passDetail = newsData.details
         
         searchBar.endEditing(true)
         self.navigationController?.pushViewController(viewController, animated: true)
